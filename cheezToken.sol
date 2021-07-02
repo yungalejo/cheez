@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.6;
 
-contract CheezDispenser {
+contract ChizDispenser {
     struct Claim {
         bool claimed;
         uint256 ratId;
@@ -9,8 +9,8 @@ contract CheezDispenser {
 
     mapping(uint256 => Claim) public existingClaims;
     
-    ERC721 ratContract = ERC721(0x089c1db714d64241192C515c0B36Ca07CA62E7AD);
-    ERC20 cheezContract = ERC20(0x2a1E167cB8D15d35fB619Af1e7f05EB8D9707205);
+    ERC721 ratContract = ERC721(0xd21a23606D2746f086f6528Cd6873bAD3307b903);
+    ERC20 chizContract = ERC20(0x2a1E167cB8D15d35fB619Af1e7f05EB8D9707205);
 
     bool paused=false;
     address deployer;
@@ -44,7 +44,7 @@ contract CheezDispenser {
         amount = newAmount;
     }
 
-    function claimCheez(uint256 ratId) public pauseable {
+    function claimChiz(uint256 ratId) public pauseable {
         Claim memory claim = existingClaims[ratId];
         require(claim.claimed == false, 'coins have already been claimed for this ratId');
 
@@ -52,14 +52,14 @@ contract CheezDispenser {
         require(msg.sender == ratOwner, 'Caller is not owner of this token ID');
 
         existingClaims[ratId] = Claim(true, ratId);
-        cheezContract.transfer(msg.sender, amount);
+        chizContract.transfer(msg.sender, amount);
 
         emit Dispense(amount, ratId);
     }
 
 
     function withdraw(uint256 withdrawAmount) public onlyDeployer {
-        cheezContract.transfer(msg.sender, withdrawAmount);
+        chizContract.transfer(msg.sender, withdrawAmount);
     }
     
 }
